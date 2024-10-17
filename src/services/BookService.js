@@ -23,7 +23,8 @@ const searchBooks = (query) => {
 };
 
 const getBookById = (id) => {
-  return axios.get(API_URL + id);
+  console.log('id', id);
+  return axios.get(API_URL + id.toString());
 };
 
 const BookService = {
