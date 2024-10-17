@@ -22,12 +22,17 @@ const searchBooks = (query) => {
   return axios.get(API_URL + 'search', { params: query });
 };
 
+const getBookById = (id) => {
+  return axios.get(API_URL + id);
+};
+
 const BookService = {
   addBook,
   editBook,
   deleteBook,
   getBooks,
   searchBooks,
+  getBookById
 };
 
 export default BookService;

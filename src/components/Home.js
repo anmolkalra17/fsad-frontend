@@ -1,11 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from './auth/AuthContext';
 import './Home.css';
 
 const Home = () => {
   const { isAuthenticated, logout } = useContext(AuthContext);
   const [books, setBooks] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
 	if (isAuthenticated) {
@@ -13,8 +14,10 @@ const Home = () => {
 		.then(response => response.json())
 		.then(data => setBooks(data))
 		.catch(error => console.error('Error fetching books:', error));
+	  
+	  navigate('/booklist');
 	}
-  }, [isAuthenticated]);
+  }, [isAuthenticated, navigate]);
 
   return (
 	<div className="home-container">

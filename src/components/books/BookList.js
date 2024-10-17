@@ -1,30 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import BookService from '../../services/BookService';
+import React, { useContext, useEffect, useState } from 'react';
+import { AuthContext } from '../auth/AuthContext';
+import './BookList.css';
 
 const BookList = () => {
+  const { logout } = useContext(AuthContext);
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
-	const fetchBooks = async () => {
-	  try {
-		const response = await BookService.getBooks();
-		setBooks(response.data);
-	  } catch (error) {
-		alert('Failed to fetch books');
-	  }
-	};
-
-	fetchBooks();
+	fetch('http://localhost:8801/api/books/')
+	  .then(response => response.json())
+	  .then(data => setBooks(data))
+	  .catch(error => console.error('Error fetching books:', error));
   }, []);
 
   return (
-	<div>
-	  <h2>My Books</h2>
-	  <ul>
-		{books.map((book) => (
-		  <li key={book.id}>
-			{book.title} by {book.author}
-		  </li>
+	<div className="booklist-container">
+	  <h1 className="booklist-title">Books List</h1>
+	  <button className="logout-button" onClick={logout}>Logout</button>
+	  <ul className="booklist">
+		{books.map(book => (
+		  <li key={book.id} className="booklist-item">{book.title}</li>
 		))}
 	  </ul>
 	</div>
