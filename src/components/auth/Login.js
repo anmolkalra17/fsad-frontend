@@ -1,4 +1,3 @@
-// Login.js
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
@@ -46,6 +45,9 @@ const Login = () => {
       </form>
       <div className="login-links">
         Don't have an account? <Link to="/register">Register</Link>
+      </div>
+      <div className="login-links">
+        <Link to="/forgot-password">Forgot Password?</Link>
       </div>
     </div>
   );

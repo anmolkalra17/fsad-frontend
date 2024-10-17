@@ -4,7 +4,7 @@ import Home from './components/Home';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import Logout from './components/auth/Logout';
-import PasswordReset from './components/auth/PasswordReset';
+import ForgotPassword from './components/auth/ForgotPassword';
 
 import SearchComponent from './components/search/SearchComponent';
 
@@ -26,7 +26,7 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />
-            <Route path="/password-reset" element={<PasswordReset />} />
+            <Route path="/password-reset" element={<ForgotPassword />} />
             {token ? (
               <Route path="/search" element={<SearchComponent />} />
             ) : (
