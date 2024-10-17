@@ -15,7 +15,7 @@ import BookDetail from './components/books/BookDetail';
 import TransactionList from './components/transactions/TransactionList';
 
 const App = () => {
-  const { token } = localStorage.getItem('token');
+  const { token } = localStorage.getItem('token') ?? "";
 
   return (
     <AuthProvider>

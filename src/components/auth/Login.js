@@ -1,13 +1,14 @@
 // Login.js
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
+import './Login.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null); // Add state for error message
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
@@ -15,40 +16,38 @@ const Login = () => {
 	e.preventDefault();
 	try {
 	  const response = await axios.post('http://localhost:8801/api/auth/login', { email, password });
-	  login(response.data.token); // Call login function from context
-	  navigate('/'); // Redirect to home page
+	  login(response.data.token);
+	  navigate('/');
 	} catch (error) {
 	  console.error('Login failed:', error);
-	  setError('Failed to log in. Please check your credentials and try again.'); // Set error message
+	  setError('Failed to log in. Please check your credentials and try again.');
 	}
   };
 
   return (
-	<div>
-	  <h2>Login</h2>
-	  {error && <div className="alert alert-danger">{error}</div>} {/* Display alert if error exists */}
-	  <form onSubmit={handleSubmit}>
-		<div>
-		  <label>Email</label>
-		  <input
-			type="email"
-			value={email}
-			onChange={(e) => setEmail(e.target.value)}
-			required
-		  />
-		</div>
-		<div>
-		  <label>Password</label>
-		  <input
-			type="password"
-			value={password}
-			onChange={(e) => setPassword(e.target.value)}
-			required
-		  />
-		</div>
-		<button type="submit">Login</button>
-	  </form>
-	</div>
+	<div className="login-container">
+      <h1 className="login-title">Login</h1>
+      <form className="login-form" onSubmit={handleSubmit}>
+        <input
+          type="email"
+          className="login-input"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          className="login-input"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button type="submit" className="login-button">Login</button>
+      </form>
+      <div className="login-links">
+        Don't have an account? <Link to="/register">Register</Link>
+      </div>
+    </div>
   );
 };
 
