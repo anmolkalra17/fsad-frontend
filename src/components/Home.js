@@ -15,7 +15,7 @@ const Home = () => {
 		.then(data => setBooks(data))
 		.catch(error => console.error('Error fetching books:', error));
 	  
-	  navigate('/booklist');
+	  navigate('/books');
 	}
   }, [isAuthenticated, navigate]);
 
