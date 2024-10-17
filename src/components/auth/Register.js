@@ -1,8 +1,9 @@
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
 import SearchComponent from '../search/SearchComponent';
+import './Register.css';
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -25,39 +26,35 @@ const Register = () => {
   };
 
   return (
-	<div>
-	  <h2>Register</h2>
+	<div className="register-container">
+	  <h1 className="register-title">Register</h1>
 	  {error && <div className="alert alert-danger">{error}</div>}
-	  <form onSubmit={handleSubmit}>
-		<div>
-		  <label>Username</label>
-		  <input
-			type="text"
-			value={username}
-			onChange={(e) => setUsername(e.target.value)}
-			required
-		  />
-		</div>
-		<div>
-		  <label>Email</label>
-		  <input
-			type="email"
-			value={email}
-			onChange={(e) => setEmail(e.target.value)}
-			required
-		  />
-		</div>
-		<div>
-		  <label>Password</label>
-		  <input
-			type="password"
-			value={password}
-			onChange={(e) => setPassword(e.target.value)}
-			required
-		  />
-		</div>
-		<button type="submit">Register</button>
+	  <form className="register-form" onSubmit={handleSubmit}>
+		<input type="text"
+		className="register-input"
+		placeholder="Username" 
+		value={username} 
+		onChange={(e) => setUsername(e.target.value)} 
+		/>
+		<input
+          type="email"
+          className="register-input"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+		<input
+          type="password"
+          className="register-input"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+		<button type="submit" className="register-button">Register</button>
 	  </form>
+	  <div className="login-links">
+        Already have an account? <Link to="/login">Login</Link>
+      </div>
 	  {token && <SearchComponent />} {/* Conditionally render the search component */}
 	</div>
   );
