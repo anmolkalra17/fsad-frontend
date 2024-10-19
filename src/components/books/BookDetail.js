@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import BookService from '../../services/BookService';
 import './BookDetail.css';
 
@@ -15,7 +15,6 @@ const BookCondition = Object.freeze({
 const BookDetail = () => {
     const { id } = useParams();
     const [book, setBook] = useState(null);
-    const navigate = useNavigate();
 
     const [isEditing, setIsEditing] = useState(false);
     const [editedBook, setEditedBook] = useState({
@@ -60,12 +59,15 @@ const BookDetail = () => {
     };
 
     const handleDelete = async () => {
-        try {
-            await BookService.deleteBook(id);
-            alert('Book deleted successfully');
-            navigate.push('/books');
-        } catch (error) {
-            alert('Failed to delete book');
+        const confirmed = window.confirm('Are you sure you want to delete this book?');
+        if (confirmed) {
+            try {
+                await BookService.deleteBook(id);
+                alert('Book deleted successfully');
+                window.location.href = '/books';
+            } catch (error) {
+                alert('Failed to delete book');
+            }
         }
     };
 

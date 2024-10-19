@@ -16,7 +16,12 @@ const editBook = (id, book) => {
 };
 
 const deleteBook = (id) => {
-  return axios.delete(API_URL + id);
+  const token = localStorage.getItem('token');
+  return axios.delete(API_URL + 'delete/' + id, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
 };
 
 const getBooks = () => {
