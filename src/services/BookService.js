@@ -7,7 +7,12 @@ const addBook = (book) => {
 };
 
 const editBook = (id, book) => {
-  return axios.put(API_URL + id, book);
+  const token = localStorage.getItem('token');
+  return axios.put(API_URL + 'edit/' + id, book, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
 };
 
 const deleteBook = (id) => {

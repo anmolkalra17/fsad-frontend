@@ -11,10 +11,6 @@ const BookCondition = Object.freeze({
     TORN: 'Torn'
 });
 
-const BookAvailable = Object.freeze({
-    YES: 'Yes',
-    NO: 'No'
-});
 
 const BookDetail = () => {
     const { id } = useParams();
@@ -22,7 +18,10 @@ const BookDetail = () => {
     const navigate = useNavigate();
 
     const [isEditing, setIsEditing] = useState(false);
-    const [editedBook, setEditedBook] = useState({ available: true, condition: 'Good' });
+    const [editedBook, setEditedBook] = useState({
+        available: false,
+        condition: ''
+    });
 
     useEffect(() => {
         const fetchBook = async () => {
@@ -40,10 +39,12 @@ const BookDetail = () => {
     }, [id]);
 
     const handleUpdate = () => {
+        editedBook.available = book.available;
         setIsEditing(true);
     };
 
     const handleCancel = () => {
+        setEditedBook(book);
         setIsEditing(false);
     };
 
@@ -70,7 +71,7 @@ const BookDetail = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setEditedBook({ ...editedBook, [name]: value });
+        setEditedBook({ ...editedBook, [name]: name === 'available' ? value === 'true' : value });
     };
 
     if (!book) {
@@ -98,19 +99,28 @@ const BookDetail = () => {
                         ))}
 
                         <p>Is the book available?</p>
-                        {Object.values(BookAvailable).map((available) => (
-                            <div key={available}>
-                                <input
-                                    type="radio"
-                                    id={available}
-                                    name="available"
-                                    value={available === 'Yes'}
-                                    checked={editedBook.available ? available === 'Yes' : available === 'No'}
-                                    onChange={handleChange}
-                                />
-                                <label htmlFor={available}>{available}</label>
-                            </div>
-                        ))}
+                        <div>
+                            <input
+                                type="radio"
+                                id="available-yes"
+                                name="available"
+                                value={true}
+                                checked={editedBook.available === true}
+                                onChange={handleChange}
+                            />
+                            <label htmlFor="available-yes">Yes</label>
+                        </div>
+                        <div>
+                            <input
+                                type="radio"
+                                id="available-no"
+                                name="available"
+                                value={false}
+                                checked={editedBook.available === false}
+                                onChange={handleChange}
+                            />
+                            <label htmlFor="available-no">No</label>
+                        </div>
                     </form>
 
                     <button className="bookdetail-button" onClick={handleSave}>Save</button>
