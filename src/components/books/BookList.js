@@ -24,9 +24,16 @@ const BookList = () => {
 		navigate(`/book/${uuid}`);
 	};
 
+	const handleAddBook = () => {
+		navigate('/add-book');
+	};
+
 	return (
 		<div className="booklist-container">
-			<button className="logout-button" onClick={logout}>Logout</button>
+			<div className="button-container">
+				<button className="addbook-button" onClick={handleAddBook}>Add Book</button>
+				<button className="logout-button" onClick={logout}>Logout</button>
+			</div>
 			<h1 className="booklist-title">Books</h1>
 			<input
 				type="text"

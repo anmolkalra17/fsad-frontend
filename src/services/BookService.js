@@ -3,7 +3,12 @@ import axios from 'axios';
 const API_URL = 'http://localhost:8801/api/books/';
 
 const addBook = (book) => {
-  return axios.post(API_URL, book);
+  const token = localStorage.getItem('token');
+  return axios.post(API_URL + 'add/', book, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
 };
 
 const editBook = (id, book) => {
