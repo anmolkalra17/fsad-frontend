@@ -1,5 +1,7 @@
 .bookdetail-container {
-  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   background-color: #f9f9f9;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -10,6 +12,21 @@
   font-size: 2em;
   margin-bottom: 10px;
   color: #333;
+}
+
+.book-detail {
+    flex: 1;
+    padding-right: 20px;
+}
+
+.book-cover {
+    flex: 0 0 200px;
+    text-align: center;
+}
+
+.book-cover img {
+    max-width: 100%;
+    height: auto;
 }
 
 .bookdetail-description {

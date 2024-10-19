@@ -21,6 +21,7 @@ const BookDetail = () => {
         available: false,
         condition: ''
     });
+    const [coverUrl, setCoverUrl] = useState('');
 
     useEffect(() => {
         const fetchBook = async () => {
@@ -28,7 +29,7 @@ const BookDetail = () => {
                 const response = await BookService.getBookById(id);
                 setBook(response.data);
                 setEditedBook(response.data);
-                console.log('Book available:', response.data.available);
+                setCoverUrl(response.data.thumbnail);
             } catch (error) {
                 alert('Failed to fetch book details');
             }
@@ -130,13 +131,22 @@ const BookDetail = () => {
                 </>
             ) : (
                 <>
-                    <h1 className="bookdetail-title">{book.title}</h1>
-                    <p className="bookdetail-author">{book.author}</p>
-                    <p className="bookdetail-description"> Genre: {book.genre}</p>
-                    <p className="bookdetail-description"> Book Condition: {book.condition}</p>
-                    <p className="bookdetail-description"> Available: {book.available ? "Yes" : "No"}</p>
-                    <button className="bookupdate-button" onClick={handleUpdate}>Update Book</button>
-                    <button className="bookdelete-button" onClick={handleDelete}>Delete Book</button>
+                    <div className='book-detail'>
+                        <h1 className="bookdetail-title">{book.title}</h1>
+                        <p className="bookdetail-author">{book.author}</p>
+                        <p className="bookdetail-description"> Genre: {book.genre}</p>
+                        <p className="bookdetail-description"> Book Condition: {book.condition}</p>
+                        <p className="bookdetail-description"> Available: {book.available ? "Yes" : "No"}</p>
+                        <button className="bookupdate-button" onClick={handleUpdate}>Update Book</button>
+                        <button className="bookdelete-button" onClick={handleDelete}>Delete Book</button>
+                    </div>
+                    <div className="book-cover">
+                        {coverUrl ? (
+                            <img src={coverUrl} alt={`${book.title} cover`} />
+                        ) : (
+                            <p>Cover image not available</p>
+                        )}
+                    </div>
                 </>
             )}
         </div>
