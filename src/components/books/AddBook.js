@@ -73,7 +73,7 @@ const AddBook = () => {
 
                 <p>Is the book available?</p>
                 <div>
-                    <label>Yes</label>
+                    
                     <input
                         type="radio"
                         id="available-yes"
@@ -82,7 +82,8 @@ const AddBook = () => {
                         checked={availability === true}
                         onChange={() => setAvailability(true)}
                     />
-                    <label>No</label>
+                    <label>Yes</label>
+                    
                     <input
                         type="radio"
                         id="available-no"
@@ -91,6 +92,7 @@ const AddBook = () => {
                         checked={availability === false}
                         onChange={() => setAvailability(false)}
                     />
+                    <label>No</label>
                 </div>
                 <button type="submit">Add Book</button>
             </form>

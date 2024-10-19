@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import BookService from '../../services/BookService';
 import './BookDetail.css';
 
+import placeholderImg from '../../placeholder.png';
+
 const BookCondition = Object.freeze({
     BEST: 'Best',
     GOOD: 'Good',
@@ -124,10 +126,9 @@ const BookDetail = () => {
                             />
                             <label htmlFor="available-no">No</label>
                         </div>
+                        <button className="bookdetail-button" onClick={handleSave}>Save</button>
+                        <button className="bookcancel-button" onClick={handleCancel}>Cancel</button>
                     </form>
-
-                    <button className="bookdetail-button" onClick={handleSave}>Save</button>
-                    <button className="bookcancel-button" onClick={handleCancel}>Cancel</button>
                 </>
             ) : (
                 <>
@@ -144,7 +145,7 @@ const BookDetail = () => {
                         {coverUrl ? (
                             <img src={coverUrl} alt={`${book.title} cover`} />
                         ) : (
-                            <p>Cover image not available</p>
+                            <img src={placeholderImg} alt='placeholder' width="200" height="200"/>
                         )}
                     </div>
                 </>
