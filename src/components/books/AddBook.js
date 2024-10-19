@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import BookService from '../../services/BookService';
+import BookCondition from './BookDetail';
 
 const AddBook = () => {
     const [title, setTitle] = useState('');
@@ -28,6 +29,20 @@ const AddBook = () => {
                 Available:
                 <input type="checkbox" checked={availability} onChange={(e) => setAvailability(e.target.checked)} />
             </label>
+            <form>
+                <p>Please select the book condition:</p>
+                {Object.values(BookCondition).map((condition) => (
+                    <div key={condition}>
+                        <input
+                            type="radio"
+                            id={condition}
+                            name="condition"
+                            value={condition}
+                        />
+                        <label htmlFor={condition}>{condition}</label>
+                    </div>
+                ))}
+            </form>
             <button type="submit">Add Book</button>
         </form>
     );

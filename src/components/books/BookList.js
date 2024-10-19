@@ -21,14 +21,13 @@ const BookList = () => {
 	);
 
 	const handleBookClick = (uuid) => {
-		console.log("Clicked on book id: ", uuid);
 		navigate(`/book/${uuid}`);
 	};
 
 	return (
 		<div className="booklist-container">
 			<button className="logout-button" onClick={logout}>Logout</button>
-			<h1 className="booklist-title">Books List</h1>
+			<h1 className="booklist-title">Books</h1>
 			<input
 				type="text"
 				className="search-bar"

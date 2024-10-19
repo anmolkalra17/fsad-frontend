@@ -6,14 +6,94 @@
   font-family: Arial, sans-serif;
 }
 
-.bookdetail-title {
+.bookdetail-title, .bookdetail-author {
   font-size: 2em;
   margin-bottom: 10px;
   color: #333;
+}
+
+.bookdetail-description {
+  font-size: 1em;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.bookdetail-input, .bookdetail-textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .bookdetail-item {
   margin-bottom: 15px;
   font-size: 1.2em;
   color: #555;
+}
+
+.bookdetail-button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 1em;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.bookdetail-button:hover {
+  background-color: #0056b3;
+}
+
+.bookcancel-button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 1em;
+  color: #007bff;
+  background-color: #ffffff;
+  border: 0.5px solid #007bff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.bookcancel-button:hover {
+  background-color: #007bff;
+  color: #ffffff;
+}
+
+.bookdelete-button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 1em;
+  color: #fff;
+  background-color: #c90606;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.bookdelete-button:hover {
+  background-color: #b30000;
+}
+
+.bookupdate-button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 1em;
+  color: #fff;
+  background-color: #6505d9;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.bookupdate-button:hover {
+  background-color: #5806bc;
 }
