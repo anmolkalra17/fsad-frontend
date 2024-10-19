@@ -7,20 +7,18 @@ import './Login.css';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
   const handleSubmit = async (e) => {
-	e.preventDefault();
-	try {
-	  const response = await axios.post('http://localhost:8801/api/auth/login', { email, password });
-	  login(response.data.token);
-	  navigate('/');
-	} catch (error) {
-	  console.error('Login failed:', error);
-	  setError('Failed to log in. Please check your credentials and try again.');
-	}
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:8801/api/auth/login', { email, password });
+      login(response.data.token, response.data.id);
+      navigate('/');
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
   };
 
   return (

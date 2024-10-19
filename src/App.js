@@ -14,6 +14,8 @@ import EditBook from './components/books/EditBook';
 import BookDetail from './components/books/BookDetail';
 import TransactionList from './components/transactions/TransactionList';
 
+import Profile from './components/Profile';
+
 const App = () => {
   const { token } = localStorage.getItem('token') ?? "";
 
@@ -37,6 +39,8 @@ const App = () => {
             <Route path="/edit-book/:id" element={<EditBook />} />
             <Route path="/book/:id" element={<BookDetail />} />
             <Route path="/transactions" element={<TransactionList />} />
+
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </div>
       </Router>

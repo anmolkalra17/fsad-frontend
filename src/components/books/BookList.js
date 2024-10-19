@@ -28,11 +28,18 @@ const BookList = () => {
 		navigate('/add-book');
 	};
 
+	const handleProfile = () => {
+		navigate('/profile');
+	};
+
 	return (
 		<div className="booklist-container">
 			<div className="button-container">
 				<button className="addbook-button" onClick={handleAddBook}>Add Book</button>
-				<button className="logout-button" onClick={logout}>Logout</button>
+				<div>
+					<button className="profile-button" onClick={handleProfile}>Profile</button>
+					<button className="logout-button" onClick={logout}>Logout</button>
+				</div>
 			</div>
 			<h1 className="booklist-title">Books</h1>
 			<input

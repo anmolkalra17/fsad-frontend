@@ -1,0 +1,41 @@
+.profile-container {
+	text-align: center;
+	margin-top: 50px;
+	font-family: Arial, sans-serif;
+}
+
+.profile-header {
+	font-size: 2em;
+	color: #333;
+}
+
+.profile-picture {
+	border-radius: 50%;
+	width: 150px;
+	height: 150px;
+	margin-bottom: 20px;
+}
+
+.profile-name {
+	font-size: 1.5em;
+	color: #555;
+}
+
+.profile-email {
+	font-size: 1em;
+	color: #777;
+}
+
+.logout-button {
+	padding: 10px 20px;
+	font-size: 16px;
+	background-color: #007BFF;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.logout-button:hover {
+	background-color: #0056b3;
+}

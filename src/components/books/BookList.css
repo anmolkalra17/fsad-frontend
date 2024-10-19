@@ -47,8 +47,24 @@
     background-color: #0bad08d4;
 }
 
+.profile-button {
+    padding: 10px 20px;
+    font-size: 1em;
+    color: #fff;
+    background-color: #6505d9;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.profile-button:hover {
+    background-color: #5806bc;
+}
+
 .logout-button {
     padding: 10px 20px;
+    margin-left: 20px;
     font-size: 1em;
     color: #fff;
     background-color: #007bff;

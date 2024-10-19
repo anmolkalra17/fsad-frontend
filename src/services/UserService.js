@@ -18,11 +18,16 @@ const resetPassword = (email) => {
   return axios.post(API_URL + 'reset-password', { email });
 };
 
+const getUserProfile = (userId) => {
+  return axios.get('http://localhost:8801/api/profiles/' + userId);
+};
+
 const UserService = {
   register,
   login,
   logout,
   resetPassword,
+  getUserProfile
 };
 
 export default UserService;
