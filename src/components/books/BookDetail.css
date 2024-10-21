@@ -116,3 +116,24 @@
 .bookupdate-button:hover {
   background-color: #5806bc;
 }
+
+.bookborrow-button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 1em;
+  color: #fff;
+  background-color: #dc700b;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.bookborrow-button:hover {
+  background-color: #c6650a;
+}
+
+.bookborrow-button:disabled {
+  background-color: grey;
+  cursor: not-allowed;
+}

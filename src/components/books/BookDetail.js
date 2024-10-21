@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom';
 import BookService from '../../services/BookService';
 import './BookDetail.css';
 
-import placeholderImg from '../../placeholder.png';
+import placeholderImg from '../../assets/placeholder.png';
+import TransactionService from '../../services/TransactionService';
 
 const BookCondition = Object.freeze({
     BEST: 'Best',
@@ -17,6 +18,10 @@ const BookCondition = Object.freeze({
 const BookDetail = () => {
     const { id } = useParams();
     const [book, setBook] = useState(null);
+
+    const currentUser = localStorage.getItem('userId') ?? ''
+
+    const [isOwner, setIsUser] = useState(false);
 
     const [isEditing, setIsEditing] = useState(false);
     const [editedBook, setEditedBook] = useState({
@@ -32,13 +37,14 @@ const BookDetail = () => {
                 setBook(response.data);
                 setEditedBook(response.data);
                 setCoverUrl(response.data.thumbnail);
+                setIsUser(response.data.user === currentUser);
             } catch (error) {
                 alert('Failed to fetch book details');
             }
         };
 
         fetchBook();
-    }, [id]);
+    }, [id, currentUser]);
 
     const handleUpdate = () => {
         editedBook.available = book.available;
@@ -77,6 +83,18 @@ const BookDetail = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setEditedBook({ ...editedBook, [name]: name === 'available' ? value === 'true' : value });
+    };
+
+    const handleBorrow = async () => {
+        const borrow = window.confirm('Are you sure you want to borrow this book?');
+        if (borrow) {
+            try {
+                await TransactionService.createTransaction(book._id);
+                alert('Borrow request sent successfully');
+            } catch (error) {
+                alert('Failed to send borrow request');
+            }
+        }
     };
 
     if (!book) {
@@ -138,8 +156,17 @@ const BookDetail = () => {
                         <p className="bookdetail-description"> Genre: {book.genre}</p>
                         <p className="bookdetail-description"> Book Condition: {book.condition}</p>
                         <p className="bookdetail-description"> Available: {book.available ? "Yes" : "No"}</p>
-                        <button className="bookupdate-button" onClick={handleUpdate}>Update Book</button>
-                        <button className="bookdelete-button" onClick={handleDelete}>Delete Book</button>
+                        
+                        {isOwner ? (
+                            <div>
+                                <button className="bookupdate-button" onClick={handleUpdate}>Update Book</button>
+                                <button className="bookdelete-button" onClick={handleDelete}>Delete Book</button>
+                            </div>
+                        ) : (
+                            <div>
+                                <button className="bookborrow-button" onClick={handleBorrow} disabled={!book.available}>Borrow Book</button>
+                            </div>
+                        )}
                     </div>
                     <div className="book-cover">
                         {coverUrl ? (

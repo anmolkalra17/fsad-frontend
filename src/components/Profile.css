@@ -49,10 +49,11 @@
 }
 
 .grid-item {
-	border: 1px solid #ccc;
-	padding: 10px;
-	border-radius: 5px;
-	background-color: #f9f9f9;
+	position: relative;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #d8d8d8;
 }
 
 .toggle-button {
@@ -67,4 +68,33 @@
 	padding: 10px 20px;
 	font-size: 1em;
 	cursor: pointer;
+}
+
+.grid-item {
+    position: relative;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.card-buttons {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: flex;
+	flex-direction: row;
+    gap: 5px;
+}
+
+.card-buttons button {
+    background: none;
+    border: none;
+    cursor: pointer;
+	padding: 5px 5px;
+}
+
+.card-buttons img {
+    width: 20px;
+    height: 20px;
 }
