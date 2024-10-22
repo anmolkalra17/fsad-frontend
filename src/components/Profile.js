@@ -35,8 +35,6 @@ const Profile = () => {
                 const { books } = response.data;
                 setBooks(books);
 
-                const { transactions } = response.data;
-                setTransactions(transactions);
             } catch (error) {
                 console.log('Failed to fetch user details');
                 console.log(error);
@@ -53,8 +51,19 @@ const Profile = () => {
             }
         };
 
+        const fetchTransactions = async () => {
+            try {
+                const response = await TransactionService.getTransactions();
+                setTransactions(response.data);
+            } catch (error) {
+                console.log('Failed to fetch borrow requests');
+                console.log(error);
+            }
+        };
+
         fetchUser();
         fetchBorrowRequests();
+        fetchTransactions();
     }, [userId]);
 
     const logout = () => {
@@ -136,6 +145,18 @@ const Profile = () => {
         }
     };
 
+    function formatTimestamp(timestamp) {
+        const date = new Date(timestamp);
+    
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+    
+        return `${hours}:${minutes}, ${day}/${month}/${year}`;
+    }
+
     return (
         <div className="profile-container">
             <div className='logout-container'>
@@ -195,10 +216,10 @@ const Profile = () => {
                                     </button>
                                 )}
                             </div>
-                            <p><strong>Transaction ID:</strong> {transaction._id}</p>
-                            <p><strong>Date:</strong> {new Date(transaction.createdAt).toDateString()}</p>
-                            <p><strong>Last Updated:</strong> {new Date(transaction.updatedAt).toDateString()}</p>
+                            <p><strong>Book Name:</strong> {transaction.bookId.title}</p>
                             <p><strong>Status:</strong> {transaction.status}</p>
+                            <p><strong>Date Requested:</strong> {formatTimestamp(new Date(transaction.createdAt))}</p>
+                            <p><strong>Last Updated:</strong> {formatTimestamp(new Date(transaction.updatedAt))}</p>
                         </div>
                     ))
                 ) : (
@@ -234,7 +255,7 @@ const Profile = () => {
                             </div>
                             <p><strong>Book Name:</strong> {borrowRequest.bookId.title}</p>
                             <p><strong>Status:</strong> {borrowRequest.status}</p>
-                            <p><strong>Created At:</strong> {new Date(borrowRequest.createdAt).toString()}</p>
+                            <p><strong>Created At:</strong> {formatTimestamp(new Date(borrowRequest.createdAt))}</p>
                         </div>
                     ))
                 ) : (
