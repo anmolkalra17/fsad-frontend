@@ -124,7 +124,7 @@ const Profile = () => {
     };
 
     const handleRejectRequest = async (transactionId) => {
-        const confirmed = window.confirm('Are you sure you want to accept this request?');
+        const confirmed = window.confirm('Are you sure you want to decline this request?');
 
         if (confirmed) {
             try {
