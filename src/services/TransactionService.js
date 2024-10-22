@@ -2,9 +2,9 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:8801/api/transactions/';
 
-const createTransaction = (id) => {
+const createTransaction = (userId, bookId, recipientUserId) => {
   const token = localStorage.getItem('token');
-  return axios.post(API_URL + 'create', { bookId: id }, {
+  return axios.post(API_URL + 'create', { userId: userId, bookId: bookId, recipientUserId: recipientUserId }, {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -31,18 +31,28 @@ const cancelTransaction = (id) => {
 
 const updateTransaction = (id, status) => {
   const token = localStorage.getItem('token');
-  return axios.put(API_URL + 'update/' + id, status, {
+  return axios.put(API_URL + 'update/' + id, { status: status }, {
     headers: {
       Authorization: `Bearer ${token}`
     }
   });
 };
 
+const getBorrowRequests = () => {
+  const token = localStorage.getItem('token');
+  return axios.get(API_URL + 'received/', {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+}
+
 const TransactionService = {
   createTransaction,
   getTransactions,
   cancelTransaction,
-  updateTransaction
+  updateTransaction,
+  getBorrowRequests
 };
 
 export default TransactionService;

@@ -36,7 +36,7 @@
 	margin-bottom: 10px;
 }
 
-.books-header, .transactions-header {
+.books-header, .transactions-header, .borrow-requests-header {
 	font-size: 1.5em;
 	margin-top: 20px;
 	margin-bottom: 10px;

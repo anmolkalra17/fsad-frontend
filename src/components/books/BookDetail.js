@@ -86,10 +86,11 @@ const BookDetail = () => {
     };
 
     const handleBorrow = async () => {
+        const currentUserId = localStorage.getItem('userId');
         const borrow = window.confirm('Are you sure you want to borrow this book?');
         if (borrow) {
             try {
-                await TransactionService.createTransaction(book._id);
+                await TransactionService.createTransaction(currentUserId, book._id, book.user);
                 alert('Borrow request sent successfully');
             } catch (error) {
                 alert('Failed to send borrow request');

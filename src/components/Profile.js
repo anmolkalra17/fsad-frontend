@@ -7,6 +7,8 @@ import './Profile.css';
 import profilePlaceholderImg from '../assets/profile-placeholder.jpg';
 import viewIcon from '../assets/view.png';
 import deleteIcon from '../assets/delete.png';
+import checkmarkIcon from '../assets/check.png';
+import removeIcon from '../assets/remove.png';
 import TransactionService from '../services/TransactionService';
 
 const Profile = () => {
@@ -14,9 +16,11 @@ const Profile = () => {
     const [user, setUser] = useState({ username: '', email: '' });
     const [books, setBooks] = useState([]);
     const [transactions, setTransactions] = useState([]);
+    const [borrowRequests, setBorrowRequests] = useState([]);
 
     const [showAllBooks, setShowAllBooks] = useState(false);
     const [showAllTransactions, setShowAllTransactions] = useState(false);
+    const [showAllBorrowRequests, setShowAllBorrowRequests] = useState(false);
 
     const userId = localStorage.getItem('userId');
 
@@ -34,12 +38,23 @@ const Profile = () => {
                 const { transactions } = response.data;
                 setTransactions(transactions);
             } catch (error) {
-                alert('Failed to fetch user details');
+                console.log('Failed to fetch user details');
+                console.log(error);
+            }
+        };
+
+        const fetchBorrowRequests = async () => {
+            try {
+                const response = await TransactionService.getBorrowRequests();
+                setBorrowRequests(response.data);
+            } catch (error) {
+                console.log('Failed to fetch borrow requests');
                 console.log(error);
             }
         };
 
         fetchUser();
+        fetchBorrowRequests();
     }, [userId]);
 
     const logout = () => {
@@ -54,6 +69,10 @@ const Profile = () => {
 
     const toggleShowAllTransactions = () => {
         setShowAllTransactions(!showAllTransactions);
+    };
+
+    const toggleShowAllBorrowRequests = () => {
+        setShowAllBorrowRequests(!showAllBorrowRequests);
     };
 
     const handleView = (bookId) => {
@@ -91,6 +110,32 @@ const Profile = () => {
         }
     };
 
+    const handleAcceptRequest = async (transactionId) => {
+        const confirmed = window.confirm('Are you sure you want to accept this request?');
+
+        if (confirmed) {
+            try {
+                await TransactionService.updateTransaction(transactionId, 'accepted');
+                window.location.href = '/profile';
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    };
+
+    const handleRejectRequest = async (transactionId) => {
+        const confirmed = window.confirm('Are you sure you want to accept this request?');
+
+        if (confirmed) {
+            try {
+                await TransactionService.updateTransaction(transactionId, 'canceled');
+                window.location.href = '/profile';
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    };
+
     return (
         <div className="profile-container">
             <div className='logout-container'>
@@ -109,10 +154,10 @@ const Profile = () => {
                     books.slice(0, showAllBooks ? books.length : 3).map((book) => (
                         <div key={book.uuid} className="grid-item">
                             <div className="card-buttons">
-                                <button className="view-button" onClick={() => handleView(book.uuid)}>
+                                <button onClick={() => handleView(book.uuid)}>
                                     <img src={viewIcon} alt="View" />
                                 </button>
-                                <button className="delete-button" onClick={() => handleDeleteBook(book.uuid)}>
+                                <button onClick={() => handleDeleteBook(book.uuid)}>
                                     <img src={deleteIcon} alt="Delete" />
                                 </button>
                             </div>
@@ -133,19 +178,19 @@ const Profile = () => {
                 </button>
             )}
 
-            <h2 className="transactions-header">Your Transactions</h2>
+            <h2 className="transactions-header">Sent Borrow Requests</h2>
             <div className="grid-container">
                 {transactions && transactions.length > 0 ? (
                     transactions.slice(0, showAllTransactions ? transactions.length : 3).map((transaction) => (
                         <div key={transaction.uuid} className="grid-item">
                             <div className="card-buttons">
-                                <button className="view-button" onClick={() => handleView(transaction.bookId)}>
+                                <button onClick={() => handleView(transaction.bookId)}>
                                     <img src={viewIcon} alt="View" />
                                 </button>
-                                { transaction.status !== 'pending' ? (
+                                {transaction.status !== 'pending' ? (
                                     console.log('Transaction is not pending')
                                 ) : (
-                                    <button className="delete-button" onClick={ () => handleDeleteTransaction(transaction._id)}>
+                                    <button onClick={() => handleDeleteTransaction(transaction._id)}>
                                         <img src={deleteIcon} alt="Delete" />
                                     </button>
                                 )}
@@ -157,12 +202,48 @@ const Profile = () => {
                         </div>
                     ))
                 ) : (
-                    <p>No transactions available</p>
+                    <p>No requests sent</p>
                 )}
             </div>
             {transactions && transactions.length > 3 && (
                 <button onClick={toggleShowAllTransactions} className="toggle-button">
                     {showAllTransactions ? 'Show Less' : 'Show More'}
+                </button>
+            )}
+            <h2 className="borrow-requests-header">Received Borrow Requests</h2>
+            <div className="grid-container">
+                {borrowRequests && borrowRequests.length > 0 ? (
+                    borrowRequests.slice(0, showAllBorrowRequests ? borrowRequests.length : 3).map((borrowRequest) => (
+                        <div key={borrowRequest._id} className="grid-item">
+                            <div className="card-buttons">
+                                <button onClick={() => handleView(borrowRequest.bookId._id)}>
+                                    <img src={viewIcon} alt="View" />
+                                </button>
+                                {borrowRequest.status === 'pending' ? (
+                                    <div>
+                                        <button onClick={() => handleAcceptRequest(borrowRequest._id)}>
+                                            <img src={checkmarkIcon} alt="Accept" />
+                                        </button>
+                                        <button onClick={() => handleRejectRequest(borrowRequest._id)}>
+                                            <img src={removeIcon} alt="Decline" />
+                                        </button>
+                                    </div>
+                                ) : (
+                                    console.log('Transaction is not pending')
+                                )}
+                            </div>
+                            <p><strong>Book Name:</strong> {borrowRequest.bookId.title}</p>
+                            <p><strong>Status:</strong> {borrowRequest.status}</p>
+                            <p><strong>Created At:</strong> {new Date(borrowRequest.createdAt).toString()}</p>
+                        </div>
+                    ))
+                ) : (
+                    <p>No requests received</p>
+                )}
+            </div>
+            {borrowRequests && borrowRequests.length > 3 && (
+                <button onClick={toggleShowAllBorrowRequests} className="toggle-button">
+                    {showAllBorrowRequests ? 'Show Less' : 'Show More'}
                 </button>
             )}
         </div>
