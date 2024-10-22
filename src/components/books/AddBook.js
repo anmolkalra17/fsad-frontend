@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import BookService from '../../services/BookService';
 import './AddBook.css';
 
+// BookCondition object
 const BookCondition = Object.freeze({
     BEST: 'Best',
     GOOD: 'Good',
@@ -10,6 +11,7 @@ const BookCondition = Object.freeze({
     TORN: 'Torn'
 });
 
+// AddBook component
 const AddBook = () => {
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
@@ -17,6 +19,7 @@ const AddBook = () => {
     const [condition, setCondition] = useState('');
     const [availability, setAvailability] = useState(false);
 
+    // Handle add book
     const handleAddBook = async (e) => {
         e.preventDefault();
         try {
@@ -28,6 +31,7 @@ const AddBook = () => {
         }
     };
 
+    // Render the AddBook component
     return (
         <div className="addbook-container">
             <h2 className="addbook-title">Add New Book</h2>
@@ -73,7 +77,7 @@ const AddBook = () => {
 
                 <p>Is the book available?</p>
                 <div>
-                    
+
                     <input
                         type="radio"
                         id="available-yes"
@@ -83,7 +87,7 @@ const AddBook = () => {
                         onChange={() => setAvailability(true)}
                     />
                     <label>Yes</label>
-                    
+
                     <input
                         type="radio"
                         id="available-no"

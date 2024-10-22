@@ -2,15 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserService from '../services/UserService';
 import BookService from '../services/BookService';
+import TransactionService from '../services/TransactionService';
 import './Profile.css';
 
+//  Image assets imports
 import profilePlaceholderImg from '../assets/profile-placeholder.jpg';
 import viewIcon from '../assets/view.png';
 import deleteIcon from '../assets/delete.png';
 import checkmarkIcon from '../assets/check.png';
 import removeIcon from '../assets/remove.png';
-import TransactionService from '../services/TransactionService';
 
+//  Profile component
 const Profile = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState({ username: '', email: '' });
@@ -24,6 +26,7 @@ const Profile = () => {
 
     const userId = localStorage.getItem('userId');
 
+    //  Fetch user, books and transactions data
     useEffect(() => {
         const fetchUser = async () => {
             try {
@@ -66,28 +69,34 @@ const Profile = () => {
         fetchTransactions();
     }, [userId]);
 
+    //  Logout handler function
     const logout = () => {
         sessionStorage.clear();
         window.history.replaceState(null, null, window.location.href);
         window.location.href = '/login';
     };
 
+    //  Toggle show all books
     const toggleShowAllBooks = () => {
         setShowAllBooks(!showAllBooks);
     };
 
+    //  Toggle show all transactions
     const toggleShowAllTransactions = () => {
         setShowAllTransactions(!showAllTransactions);
     };
 
+    //  Toggle show all borrow requests
     const toggleShowAllBorrowRequests = () => {
         setShowAllBorrowRequests(!showAllBorrowRequests);
     };
 
+    //  Handle view book
     const handleView = (bookId) => {
         navigate(`/book/${bookId}`);
     };
 
+    //  Handle delete book
     const handleDeleteBook = async (id) => {
         const confirmed = window.confirm('Are you sure you want to delete this book?');
         if (confirmed) {
@@ -101,6 +110,7 @@ const Profile = () => {
         }
     };
 
+    //  Handle delete transaction
     const handleDeleteTransaction = async (bookId) => {
         const confirmed = window.confirm('Are you sure you want to cancel this transaction?');
 
@@ -119,6 +129,7 @@ const Profile = () => {
         }
     };
 
+    //  Handle transcation accept request
     const handleAcceptRequest = async (transactionId) => {
         const confirmed = window.confirm('Are you sure you want to accept this request?');
 
@@ -132,6 +143,7 @@ const Profile = () => {
         }
     };
 
+    //  Handle transcation reject request
     const handleRejectRequest = async (transactionId) => {
         const confirmed = window.confirm('Are you sure you want to decline this request?');
 
@@ -145,18 +157,20 @@ const Profile = () => {
         }
     };
 
+    //  Format timestamp
     function formatTimestamp(timestamp) {
         const date = new Date(timestamp);
-    
+
         const hours = String(date.getHours()).padStart(2, '0');
         const minutes = String(date.getMinutes()).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const year = date.getFullYear();
-    
+
         return `${hours}:${minutes}, ${day}/${month}/${year}`;
     }
 
+    //  Render Profile component
     return (
         <div className="profile-container">
             <div className='logout-container'>
@@ -205,7 +219,7 @@ const Profile = () => {
                     transactions.slice(0, showAllTransactions ? transactions.length : 3).map((transaction) => (
                         <div key={transaction.uuid} className="grid-item">
                             <div className="card-buttons">
-                                <button onClick={() => handleView(transaction.bookId)}>
+                                <button onClick={() => handleView(transaction.bookId._id)}>
                                     <img src={viewIcon} alt="View" />
                                 </button>
                                 {transaction.status !== 'pending' ? (

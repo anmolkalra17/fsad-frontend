@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../auth/AuthContext';
 import './BookList.css';
 
+// BookList component
 const BookList = () => {
 	const { logout } = useContext(AuthContext);
 	const [books, setBooks] = useState([]);
 	const [searchQuery, setSearchQuery] = useState('');
 	const navigate = useNavigate();
 
+	// Fetch books when component mounts
 	useEffect(() => {
 		fetch('http://localhost:8801/api/books/')
 			.then(response => response.json())
@@ -16,22 +18,27 @@ const BookList = () => {
 			.catch(error => console.error('Error fetching books:', error));
 	}, []);
 
+	// Filter books based on search query
 	const filteredBooks = books.filter(book =>
 		book.title.toLowerCase().includes(searchQuery.toLowerCase())
 	);
 
+	// Navigate to book details
 	const handleBookClick = (uuid) => {
 		navigate(`/book/${uuid}`);
 	};
 
+	// Add Book handler function
 	const handleAddBook = () => {
 		navigate('/add-book');
 	};
 
+	//	Profile handler function
 	const handleProfile = () => {
 		navigate('/profile');
 	};
 
+	// Render the BookList component
 	return (
 		<div className="booklist-container">
 			<div className="button-container">

@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+//  Base URL
 const API_URL = 'http://localhost:8801/api/transactions/';
 
+//  Create transaction route
 const createTransaction = (userId, bookId, recipientUserId) => {
   const token = localStorage.getItem('token');
   return axios.post(API_URL + 'create', { userId: userId, bookId: bookId, recipientUserId: recipientUserId }, {
@@ -11,6 +13,7 @@ const createTransaction = (userId, bookId, recipientUserId) => {
   });
 }
 
+//  Get transactions route
 const getTransactions = () => {
   const token = localStorage.getItem('token');
   return axios.get(API_URL + 'history', {
@@ -20,6 +23,7 @@ const getTransactions = () => {
   });
 };
 
+//  Cancel transaction route
 const cancelTransaction = (id) => {
   const token = localStorage.getItem('token');
   return axios.delete(API_URL + 'cancel/' + id, {
@@ -29,6 +33,7 @@ const cancelTransaction = (id) => {
   });
 };
 
+//  Update transaction route
 const updateTransaction = (id, status) => {
   const token = localStorage.getItem('token');
   return axios.put(API_URL + 'update/' + id, { status: status }, {
@@ -38,6 +43,7 @@ const updateTransaction = (id, status) => {
   });
 };
 
+//  Get borrow requests route
 const getBorrowRequests = () => {
   const token = localStorage.getItem('token');
   return axios.get(API_URL + 'received/', {
@@ -47,6 +53,7 @@ const getBorrowRequests = () => {
   });
 }
 
+//  Create transaction service
 const TransactionService = {
   createTransaction,
   getTransactions,

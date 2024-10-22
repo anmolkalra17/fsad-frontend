@@ -17,12 +17,12 @@ const Login = () => {
       login(response.data.token, response.data.id);
       navigate('/');
     } catch (error) {
-      console.error('Login failed:', error);
+      alert('Login failed: ', error);
     }
   };
 
   return (
-	<div className="login-container">
+    <div className="login-container">
       <h1 className="login-title">Login</h1>
       <form className="login-form" onSubmit={handleSubmit}>
         <input

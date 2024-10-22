@@ -28,7 +28,7 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />
-            <Route path="/password-reset" element={<ForgotPassword />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             {token ? (
               <Route path="/search" element={<SearchComponent />} />
             ) : (

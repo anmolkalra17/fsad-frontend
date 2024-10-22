@@ -6,6 +6,7 @@ import './BookDetail.css';
 import placeholderImg from '../../assets/placeholder.png';
 import TransactionService from '../../services/TransactionService';
 
+// BookCondition object
 const BookCondition = Object.freeze({
     BEST: 'Best',
     GOOD: 'Good',
@@ -14,7 +15,7 @@ const BookCondition = Object.freeze({
     TORN: 'Torn'
 });
 
-
+// BookDetail component
 const BookDetail = () => {
     const { id } = useParams();
     const [book, setBook] = useState(null);
@@ -30,6 +31,7 @@ const BookDetail = () => {
     });
     const [coverUrl, setCoverUrl] = useState('');
 
+    // Fetch book details
     useEffect(() => {
         const fetchBook = async () => {
             try {
@@ -46,16 +48,19 @@ const BookDetail = () => {
         fetchBook();
     }, [id, currentUser]);
 
+    // Update book handler
     const handleUpdate = () => {
         editedBook.available = book.available;
         setIsEditing(true);
     };
 
+    // Cancel edit handler
     const handleCancel = () => {
         setEditedBook(book);
         setIsEditing(false);
     };
 
+    // Save book handler
     const handleSave = async () => {
         try {
             await BookService.editBook(id, editedBook);
@@ -67,6 +72,7 @@ const BookDetail = () => {
         }
     };
 
+    // Delete book handler
     const handleDelete = async () => {
         const confirmed = window.confirm('Are you sure you want to delete this book?');
         if (confirmed) {
@@ -80,11 +86,13 @@ const BookDetail = () => {
         }
     };
 
+    // Book data change handler
     const handleChange = (e) => {
         const { name, value } = e.target;
         setEditedBook({ ...editedBook, [name]: name === 'available' ? value === 'true' : value });
     };
 
+    // Borrow book handler
     const handleBorrow = async () => {
         const currentUserId = localStorage.getItem('userId');
         const borrow = window.confirm('Are you sure you want to borrow this book?');
@@ -102,6 +110,7 @@ const BookDetail = () => {
         return <div>Loading...</div>;
     }
 
+    // Render the BookDetail component
     return (
         <div className="bookdetail-container">
             {isEditing ? (
@@ -157,7 +166,7 @@ const BookDetail = () => {
                         <p className="bookdetail-description"> Genre: {book.genre}</p>
                         <p className="bookdetail-description"> Book Condition: {book.condition}</p>
                         <p className="bookdetail-description"> Available: {book.available ? "Yes" : "No"}</p>
-                        
+
                         {isOwner ? (
                             <div>
                                 <button className="bookupdate-button" onClick={handleUpdate}>Update Book</button>
@@ -173,7 +182,7 @@ const BookDetail = () => {
                         {coverUrl ? (
                             <img src={coverUrl} alt={`${book.title} cover`} />
                         ) : (
-                            <img src={placeholderImg} alt='placeholder' width="200" height="200"/>
+                            <img src={placeholderImg} alt='placeholder' width="200" height="200" />
                         )}
                     </div>
                 </>
