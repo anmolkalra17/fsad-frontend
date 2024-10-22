@@ -205,7 +205,7 @@ const Profile = () => {
                     transactions.slice(0, showAllTransactions ? transactions.length : 3).map((transaction) => (
                         <div key={transaction.uuid} className="grid-item">
                             <div className="card-buttons">
-                                <button onClick={() => handleView(transaction.bookId)}>
+                                <button onClick={() => handleView(transaction.bookId._id)}>
                                     <img src={viewIcon} alt="View" />
                                 </button>
                                 {transaction.status !== 'pending' ? (
