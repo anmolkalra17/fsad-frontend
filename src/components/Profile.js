@@ -15,28 +15,28 @@ import removeIcon from '../assets/remove.png';
 //  Profile component
 const Profile = () => {
     const navigate = useNavigate();
-    const [user, setUser] = useState({ username: '', email: '' });
-    const [books, setBooks] = useState([]);
-    const [transactions, setTransactions] = useState([]);
-    const [borrowRequests, setBorrowRequests] = useState([]);
+    const [userData, setUserData] = useState({ username: '', email: '' });
+    const [booksData, setBooksData] = useState([]);
+    const [transactionsData, setTransactionsData] = useState([]);
+    const [borrowRequestsData, setBorrowRequestsData] = useState([]);
 
-    const [showAllBooks, setShowAllBooks] = useState(false);
-    const [showAllTransactions, setShowAllTransactions] = useState(false);
-    const [showAllBorrowRequests, setShowAllBorrowRequests] = useState(false);
+    const [showAllBooksToggle, setShowAllBooksToggle] = useState(false);
+    const [showAllTransactionsToggle, setShowAllTransactionsToggle] = useState(false);
+    const [showAllBorrowRequestsToggle, setShowAllBorrowRequestsToggle] = useState(false);
 
     const userId = localStorage.getItem('userId');
 
     //  Fetch user, books and transactions data
     useEffect(() => {
-        const fetchUser = async () => {
+        const fetchUserData = async () => {
             try {
                 const response = await UserService.getUserProfile(userId);
 
                 const { username, email } = response.data.user;
-                setUser({ username, email });
+                setUserData({ username, email });
 
                 const { books } = response.data;
-                setBooks(books);
+                setBooksData(books);
 
             } catch (error) {
                 console.log('Failed to fetch user details');
@@ -44,33 +44,33 @@ const Profile = () => {
             }
         };
 
-        const fetchBorrowRequests = async () => {
+        const fetchBorrowRequestsData = async () => {
             try {
                 const response = await TransactionService.getBorrowRequests();
-                setBorrowRequests(response.data);
+                setBorrowRequestsData(response.data);
             } catch (error) {
                 console.log('Failed to fetch borrow requests');
                 console.log(error);
             }
         };
 
-        const fetchTransactions = async () => {
+        const fetchTransactionsData = async () => {
             try {
                 const response = await TransactionService.getTransactions();
-                setTransactions(response.data);
+                setTransactionsData(response.data);
             } catch (error) {
                 console.log('Failed to fetch borrow requests');
                 console.log(error);
             }
         };
 
-        fetchUser();
-        fetchBorrowRequests();
-        fetchTransactions();
+        fetchUserData();
+        fetchBorrowRequestsData();
+        fetchTransactionsData();
     }, [userId]);
 
     //  Logout handler function
-    const logout = () => {
+    const logoutUser = () => {
         sessionStorage.clear();
         window.history.replaceState(null, null, window.location.href);
         window.location.href = '/login';
@@ -78,21 +78,21 @@ const Profile = () => {
 
     //  Toggle show all books
     const toggleShowAllBooks = () => {
-        setShowAllBooks(!showAllBooks);
+        setShowAllBooksToggle(!showAllBooksToggle);
     };
 
     //  Toggle show all transactions
     const toggleShowAllTransactions = () => {
-        setShowAllTransactions(!showAllTransactions);
+        setShowAllTransactionsToggle(!showAllTransactionsToggle);
     };
 
     //  Toggle show all borrow requests
     const toggleShowAllBorrowRequests = () => {
-        setShowAllBorrowRequests(!showAllBorrowRequests);
+        setShowAllBorrowRequestsToggle(!showAllBorrowRequestsToggle);
     };
 
     //  Handle view book
-    const handleView = (bookId) => {
+    const handleBookDetailView = (bookId) => {
         navigate(`/book/${bookId}`);
     };
 
@@ -119,7 +119,7 @@ const Profile = () => {
                 const response = await TransactionService.cancelTransaction(bookId);
                 window.location.href = '/profile';
                 if (response.ok) {
-                    setBooks((prevBooks) => prevBooks.filter((book) => book._id !== bookId));
+                    setBooksData((prevBooks) => prevBooks.filter((book) => book._id !== bookId));
                 } else {
                     console.error('Failed to cancel the transaction');
                 }
@@ -130,7 +130,7 @@ const Profile = () => {
     };
 
     //  Handle transcation accept request
-    const handleAcceptRequest = async (transactionId) => {
+    const handleAcceptTransactionClick = async (transactionId) => {
         const confirmed = window.confirm('Are you sure you want to accept this request?');
 
         if (confirmed) {
@@ -144,7 +144,7 @@ const Profile = () => {
     };
 
     //  Handle transcation reject request
-    const handleRejectRequest = async (transactionId) => {
+    const handleRejectTransactionClick = async (transactionId) => {
         const confirmed = window.confirm('Are you sure you want to decline this request?');
 
         if (confirmed) {
@@ -174,92 +174,92 @@ const Profile = () => {
     return (
         <div className="profile-container">
             <div className='logout-container'>
-                <button onClick={logout} className="logout-profile-button">Logout</button>
+                <button onClick={logoutUser} className="logout-profile-button">Logout</button>
             </div>
 
             <div className='profile-details'>
-                <h1 className="profile-header">Hello, {user.username ?? 'Username'}</h1>
+                <h1 className="profile-header">Hello, {userData.username ?? 'Username'}</h1>
                 <img src={profilePlaceholderImg} alt='profile-placeholder' className='profile-picture'></img>
-                <p className="profile-email">{user.email ?? 'Email'}</p>
+                <p className="profile-email">{userData.email ?? 'Email'}</p>
             </div>
 
             <h2 className="books-header">Your Books</h2>
             <div className="grid-container">
-                {books && books.length > 0 ? (
-                    books.slice(0, showAllBooks ? books.length : 3).map((book) => (
-                        <div key={book.uuid} className="grid-item">
+                {booksData && booksData.length > 0 ? (
+                    booksData.slice(0, showAllBooksToggle ? booksData.length : 3).map((bookData) => (
+                        <div key={bookData.uuid} className="grid-item">
                             <div className="card-buttons">
-                                <button onClick={() => handleView(book.uuid)}>
+                                <button onClick={() => handleBookDetailView(bookData.uuid)}>
                                     <img src={viewIcon} alt="View" />
                                 </button>
-                                <button onClick={() => handleDeleteBook(book.uuid)}>
+                                <button onClick={() => handleDeleteBook(bookData.uuid)}>
                                     <img src={deleteIcon} alt="Delete" />
                                 </button>
                             </div>
-                            <p><strong>Title:</strong> {book.title}</p>
-                            <p><strong>Author:</strong> {book.author}</p>
-                            <p><strong>Genre:</strong> {book.genre}</p>
-                            <p><strong>Condition:</strong> {book.condition}</p>
-                            <p><strong>Available:</strong> {book.available ? 'Yes' : 'No'}</p>
+                            <p><strong>Title:</strong> {bookData.title}</p>
+                            <p><strong>Author:</strong> {bookData.author}</p>
+                            <p><strong>Genre:</strong> {bookData.genre}</p>
+                            <p><strong>Condition:</strong> {bookData.condition}</p>
+                            <p><strong>Available:</strong> {bookData.available ? 'Yes' : 'No'}</p>
                         </div>
                     ))
                 ) : (
                     <p>No books available</p>
                 )}
             </div>
-            {books && books.length > 3 && (
+            {booksData && booksData.length > 3 && (
                 <button onClick={toggleShowAllBooks} className="toggle-button">
-                    {showAllBooks ? 'Show Less' : 'Show More'}
+                    {showAllBooksToggle ? 'Show Less' : 'Show More'}
                 </button>
             )}
 
             <h2 className="transactions-header">Sent Borrow Requests</h2>
             <div className="grid-container">
-                {transactions && transactions.length > 0 ? (
-                    transactions.slice(0, showAllTransactions ? transactions.length : 3).map((transaction) => (
-                        <div key={transaction.uuid} className="grid-item">
+                {transactionsData && transactionsData.length > 0 ? (
+                    transactionsData.slice(0, showAllTransactionsToggle ? transactionsData.length : 3).map((transactionData) => (
+                        <div key={transactionData.uuid} className="grid-item">
                             <div className="card-buttons">
-                                <button onClick={() => handleView(transaction.bookId._id)}>
+                                <button onClick={() => handleBookDetailView(transactionData.bookId._id)}>
                                     <img src={viewIcon} alt="View" />
                                 </button>
-                                {transaction.status !== 'pending' ? (
+                                {transactionData.status !== 'pending' ? (
                                     console.log('Transaction is not pending')
                                 ) : (
-                                    <button onClick={() => handleDeleteTransaction(transaction._id)}>
+                                    <button onClick={() => handleDeleteTransaction(transactionData._id)}>
                                         <img src={deleteIcon} alt="Delete" />
                                     </button>
                                 )}
                             </div>
-                            <p><strong>Book Name:</strong> {transaction.bookId.title}</p>
-                            <p><strong>Status:</strong> {transaction.status}</p>
-                            <p><strong>Date Requested:</strong> {formatTimestamp(new Date(transaction.createdAt))}</p>
-                            <p><strong>Last Updated:</strong> {formatTimestamp(new Date(transaction.updatedAt))}</p>
+                            <p><strong>Book Name:</strong> {transactionData.bookId.title}</p>
+                            <p><strong>Status:</strong> {transactionData.status}</p>
+                            <p><strong>Date Requested:</strong> {formatTimestamp(new Date(transactionData.createdAt))}</p>
+                            <p><strong>Last Updated:</strong> {formatTimestamp(new Date(transactionData.updatedAt))}</p>
                         </div>
                     ))
                 ) : (
                     <p>No requests sent</p>
                 )}
             </div>
-            {transactions && transactions.length > 3 && (
+            {transactionsData && transactionsData.length > 3 && (
                 <button onClick={toggleShowAllTransactions} className="toggle-button">
-                    {showAllTransactions ? 'Show Less' : 'Show More'}
+                    {showAllTransactionsToggle ? 'Show Less' : 'Show More'}
                 </button>
             )}
             <h2 className="borrow-requests-header">Received Borrow Requests</h2>
             <div className="grid-container">
-                {borrowRequests && borrowRequests.length > 0 ? (
-                    borrowRequests.slice(0, showAllBorrowRequests ? borrowRequests.length : 3).map((borrowRequest) => (
-                        <div key={borrowRequest._id} className="grid-item">
+                {borrowRequestsData && borrowRequestsData.length > 0 ? (
+                    borrowRequestsData.slice(0, showAllBorrowRequestsToggle ? borrowRequestsData.length : 3).map((borrowRequestData) => (
+                        <div key={borrowRequestData._id} className="grid-item">
                             <div className="card-buttons">
-                                <button onClick={() => handleView(borrowRequest.bookId._id)}>
+                                <button onClick={() => handleBookDetailView(borrowRequestData.bookId._id)}>
                                     <img src={viewIcon} alt="View" />
                                 </button>
-                                {borrowRequest.status === 'pending' ? (
+                                {borrowRequestData.status === 'pending' ? (
                                     <div>
-                                        <button onClick={() => handleAcceptRequest(borrowRequest._id)}>
+                                        <button onClick={() => handleAcceptTransactionClick(borrowRequestData._id)}>
                                             <img src={checkmarkIcon} alt="Accept" />
                                         </button>
-                                        <button onClick={() => handleRejectRequest(borrowRequest._id)}>
+                                        <button onClick={() => handleRejectTransactionClick(borrowRequestData._id)}>
                                             <img src={removeIcon} alt="Decline" />
                                         </button>
                                     </div>
@@ -267,18 +267,18 @@ const Profile = () => {
                                     console.log('Transaction is not pending')
                                 )}
                             </div>
-                            <p><strong>Book Name:</strong> {borrowRequest.bookId.title}</p>
-                            <p><strong>Status:</strong> {borrowRequest.status}</p>
-                            <p><strong>Created At:</strong> {formatTimestamp(new Date(borrowRequest.createdAt))}</p>
+                            <p><strong>Book Name:</strong> {borrowRequestData.bookId.title}</p>
+                            <p><strong>Status:</strong> {borrowRequestData.status}</p>
+                            <p><strong>Created At:</strong> {formatTimestamp(new Date(borrowRequestData.createdAt))}</p>
                         </div>
                     ))
                 ) : (
                     <p>No requests received</p>
                 )}
             </div>
-            {borrowRequests && borrowRequests.length > 3 && (
+            {borrowRequestsData && borrowRequestsData.length > 3 && (
                 <button onClick={toggleShowAllBorrowRequests} className="toggle-button">
-                    {showAllBorrowRequests ? 'Show Less' : 'Show More'}
+                    {showAllBorrowRequestsToggle ? 'Show Less' : 'Show More'}
                 </button>
             )}
         </div>

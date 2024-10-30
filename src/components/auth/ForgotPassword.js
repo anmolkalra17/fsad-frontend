@@ -5,66 +5,67 @@ import UserService from '../../services/UserService';
 
 // ForgotPassword component
 const ForgotPassword = () => {
-	const [email, setEmail] = useState('');
-	const [message, setMessage] = useState('');
-	const [messageType, setMessageType] = useState('');
-	const [newPassword, setNewPassword] = useState('');
-	const [confirmPassword, setConfirmPassword] = useState('');
+	const [userEmail, setUserEmail] = useState('');
+	const [responseMessage, setResponseMessage] = useState('');
+	const [responseMessageType, setResponseMessageType] = useState('');
+	const [newUserPassword, setNewUserPassword] = useState('');
+	const [confirmNewUserPassword, setConfirmNewUserPassword] = useState('');
+
 	const location = useLocation();
 	const navigate = useNavigate();
 
-	const query = new URLSearchParams(location.search);
-	const token = query.get('token');
+	const urlQuery = new URLSearchParams(location.search);
+	const authToken = urlQuery.get('token');
 
 	// Handle form submission
-	const handleSubmit = async (e) => {
+	const handleFormSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			await UserService.sendPasswordResetEmail(email);
-			setMessage('Password reset email sent. Please check your inbox.');
-			setMessageType('success');
+			await UserService.sendPasswordResetEmail(userEmail);
+			setResponseMessage('Password reset email sent. Please check your inbox.');
+			setResponseMessageType('success');
 		} catch (error) {
-			setMessage('Failed to send password reset email. Please try again.');
-			setMessageType('error');
+			setResponseMessage('Failed to send password reset email. Please try again.');
+			setResponseMessageType('error');
 		}
 	};
 
 	// Handle password reset
 	const handlePasswordReset = async (e) => {
 		e.preventDefault();
-		if (newPassword !== confirmPassword) {
-			setMessage('Passwords do not match.');
+		if (newUserPassword !== confirmNewUserPassword) {
+			setResponseMessage('Passwords do not match.');
 			return;
 		}
 		try {
-			await UserService.resetPassword(token, email, newPassword);
+			await UserService.resetPassword(authToken, newUserPassword);
 			alert('Password has been reset successfully.');
 			navigate('/login');
 		} catch (error) {
 			alert('Failed to reset password:', error);
-			setMessage('Failed to reset password. Please try again.');
+			setResponseMessage('Failed to reset password. Please try again.');
 		}
 	};
 
 	// Render the ForgotPassword component
 	return (
 		<div className="forgot-password-container">
-			{token ? (
+			{authToken ? (
 				<>
 					<h1>Reset Password</h1>
 					<form onSubmit={handlePasswordReset}>
 						<input
 							type="password"
 							placeholder="Enter new password"
-							value={newPassword}
-							onChange={(e) => setNewPassword(e.target.value)}
+							value={newUserPassword}
+							onChange={(e) => setNewUserPassword(e.target.value)}
 							required
 						/>
 						<input
 							type="password"
 							placeholder="Confirm new password"
-							value={confirmPassword}
-							onChange={(e) => setConfirmPassword(e.target.value)}
+							value={confirmNewUserPassword}
+							onChange={(e) => setConfirmNewUserPassword(e.target.value)}
 							required
 						/>
 						<button type="submit">Reset Password</button>
@@ -73,21 +74,21 @@ const ForgotPassword = () => {
 			) : (
 				<>
 					<h1>Forgot Password</h1>
-					<form onSubmit={handleSubmit}>
+					<form onSubmit={handleFormSubmit}>
 						<input
 							type="email"
 							placeholder="Enter your email"
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
+							value={userEmail}
+							onChange={(e) => setUserEmail(e.target.value)}
 							required
 						/>
 						<button type="submit">Send Reset Link</button>
 					</form>
 				</>
 			)}
-			{message && (
-				<div className={`message ${messageType}`}>
-					{message}
+			{responseMessage && (
+				<div className={`message ${responseMessageType}`}>
+					{responseMessage}
 				</div>
 			)}
 		</div>

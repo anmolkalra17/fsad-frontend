@@ -1,25 +1,45 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 import { AuthContext } from './auth/AuthContext';
 import './Home.css';
 
+//	Check if current token is valid or not
+const checkTokenValidity = (authToken) => {
+	if (!authToken) return false;
+
+	try {
+		const decodedAuthToken = jwtDecode(authToken);
+		const currentTime = Date.now() / 1000;
+		return decodedAuthToken.exp > currentTime;
+	} catch(err) {
+		return false;
+	}
+};
+
 // Home component
 const Home = () => {
-	const { isAuthenticated, logout } = useContext(AuthContext);
+	const { isUserAuthenticated, logoutHandler } = useContext(AuthContext);
 	const [books, setBooks] = useState([]);
 	const navigate = useNavigate();
 
 	// Fetch books when user is authenticated
 	useEffect(() => {
-		if (isAuthenticated) {
-			fetch('http://localhost:8801/api/books/')
-				.then(response => response.json())
-				.then(data => setBooks(data))
-				.catch(error => console.error('Error fetching books:', error));
-
-			navigate('/books');
+		const authToken = localStorage.getItem('token');
+		
+		if (authToken && checkTokenValidity(authToken)) {
+			if (isUserAuthenticated) {
+				fetch('http://localhost:8801/api/books/')
+					.then(response => response.json())
+					.then(data => setBooks(data))
+					.catch(error => console.error('Error fetching books:', error));
+	
+				navigate('/books');
+			}
+		} else {
+			localStorage.removeItem('token');
 		}
-	}, [isAuthenticated, navigate]);
+	}, [isUserAuthenticated, navigate]);
 
 	// Render the Home component
 	return (
@@ -28,9 +48,9 @@ const Home = () => {
 			<h2 className="home-title-body">
 				Page Pilot is a dynamic library management system that simplifies the organization of books and resources. Its user-friendly interface allows for efficient cataloging and tracking, making it easy to oversee collections and engage patrons. With advanced search capabilities, Page Pilot enhances the overall library experience for users.
 			</h2>
-			{isAuthenticated ? (
+			{isUserAuthenticated ? (
 				<>
-					<button className="home-button" onClick={logout}>Logout</button>
+					<button className="home-button" onClick={logoutHandler}>Logout</button>
 					<div className="books-list">
 						<h2>Books List</h2>
 						<ul>

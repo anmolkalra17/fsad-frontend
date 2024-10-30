@@ -3,30 +3,30 @@ import React, { createContext, useState, useEffect } from 'react';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
 
     useEffect(() => {
-        const token = localStorage.getItem('token') ?? "";
-        if (token) {
-            setIsAuthenticated(true);
+        const authToken = localStorage.getItem('token') ?? "";
+        if (authToken) {
+            setIsUserAuthenticated(true);
         }
     }, []);
 
-    const login = (token, userId) => {
+    const loginHandler = (token, userId) => {
         localStorage.setItem('token', token);
         localStorage.setItem('userId', userId);
-        setIsAuthenticated(true);
+        setIsUserAuthenticated(true);
     };
 
-    const logout = () => {
+    const logoutHandler = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
-        setIsAuthenticated(false);
+        setIsUserAuthenticated(false);
         window.location.href = '/';
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+        <AuthContext.Provider value={{ isUserAuthenticated, loginHandler, logoutHandler }}>
             {children}
         </AuthContext.Provider>
     );

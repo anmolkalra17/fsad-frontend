@@ -13,17 +13,17 @@ const BookCondition = Object.freeze({
 
 // AddBook component
 const AddBook = () => {
-    const [title, setTitle] = useState('');
-    const [author, setAuthor] = useState('');
-    const [genre, setGenre] = useState('');
-    const [condition, setCondition] = useState('');
-    const [availability, setAvailability] = useState(false);
+    const [bookTitle, setBookTitle] = useState('');
+    const [bookAuthor, setBookAuthor] = useState('');
+    const [bookGenre, setBookGenre] = useState('');
+    const [bookCondition, setBookCondition] = useState('');
+    const [bookAvailability, setBookAvailability] = useState(false);
 
     // Handle add book
-    const handleAddBook = async (e) => {
+    const handleBookAddition = async (e) => {
         e.preventDefault();
         try {
-            await BookService.addBook({ title, author, genre, condition, availability });
+            await BookService.addBook({ title: bookTitle, author: bookAuthor, genre: bookGenre, condition: bookCondition, available: bookAvailability });
             alert('Book added successfully');
             window.location.href = '/books';
         } catch (error) {
@@ -35,29 +35,29 @@ const AddBook = () => {
     return (
         <div className="addbook-container">
             <h2 className="addbook-title">Add New Book</h2>
-            <form className="addbook-form" onSubmit={handleAddBook}>
+            <form className="addbook-form" onSubmit={handleBookAddition}>
                 <label htmlFor="title">Title</label>
                 <input
                     type="text"
                     id="title"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    value={bookTitle}
+                    onChange={(e) => setBookTitle(e.target.value)}
                     required
                 />
                 <label htmlFor="author">Author</label>
                 <input
                     type="text"
                     id="author"
-                    value={author}
-                    onChange={(e) => setAuthor(e.target.value)}
+                    value={bookAuthor}
+                    onChange={(e) => setBookAuthor(e.target.value)}
                     required
                 />
                 <label htmlFor="genre">Genre</label>
                 <input
                     type="text"
                     id="genre"
-                    value={genre}
-                    onChange={(e) => setGenre(e.target.value)}
+                    value={bookGenre}
+                    onChange={(e) => setBookGenre(e.target.value)}
                     required
                 />
 
@@ -69,7 +69,7 @@ const AddBook = () => {
                             type="radio"
                             id={condition}
                             name="condition"
-                            onChange={() => setCondition(condition)}
+                            onChange={() => setBookCondition(condition)}
                         />
                         <label htmlFor={condition}>{condition}</label>
                     </div>
@@ -83,8 +83,8 @@ const AddBook = () => {
                         id="available-yes"
                         name="available"
                         value={true}
-                        checked={availability === true}
-                        onChange={() => setAvailability(true)}
+                        checked={bookAvailability === true}
+                        onChange={() => setBookAvailability(true)}
                     />
                     <label>Yes</label>
 
@@ -93,8 +93,8 @@ const AddBook = () => {
                         id="available-no"
                         name="available"
                         value={false}
-                        checked={availability === false}
-                        onChange={() => setAvailability(false)}
+                        checked={bookAvailability === false}
+                        onChange={() => setBookAvailability(false)}
                     />
                     <label>No</label>
                 </div>

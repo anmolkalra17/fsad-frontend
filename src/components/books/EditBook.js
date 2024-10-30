@@ -15,7 +15,7 @@ const EditBook = () => {
 
 	// Fetch book details
 	useEffect(() => {
-		const fetchBook = async () => {
+		const fetchBookData = async () => {
 			try {
 				const response = await BookService.getBookById(id);
 				setBook(response.data);
@@ -24,11 +24,11 @@ const EditBook = () => {
 			}
 		};
 
-		fetchBook();
+		fetchBookData();
 	}, [id]);
 
 	// Handle edit book
-	const handleEditBook = async (e) => {
+	const handleEditBookClick = async (e) => {
 		e.preventDefault();
 		try {
 			await BookService.editBook(id, book);
@@ -40,7 +40,7 @@ const EditBook = () => {
 
 	// Render the EditBook component
 	return (
-		<form onSubmit={handleEditBook}>
+		<form onSubmit={handleEditBookClick}>
 			<input type="text" value={book.title} onChange={(e) => setBook({ ...book, title: e.target.value })} placeholder="Title" required />
 			<input type="text" value={book.author} onChange={(e) => setBook({ ...book, author: e.target.value })} placeholder="Author" required />
 			<input type="text" value={book.genre} onChange={(e) => setBook({ ...book, genre: e.target.value })} placeholder="Genre" required />

@@ -2,20 +2,28 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../auth/AuthContext';
 import './BookList.css';
+import BookService from '../../services/BookService';
 
 // BookList component
 const BookList = () => {
-	const { logout } = useContext(AuthContext);
+	const { logoutHandler } = useContext(AuthContext);
 	const [books, setBooks] = useState([]);
 	const [searchQuery, setSearchQuery] = useState('');
 	const navigate = useNavigate();
 
 	// Fetch books when component mounts
 	useEffect(() => {
-		fetch('http://localhost:8801/api/books/')
-			.then(response => response.json())
-			.then(data => setBooks(data))
-			.catch(error => console.error('Error fetching books:', error));
+
+		const getBookData = async () => {
+			try {
+				const response = await BookService.getBooks();
+				setBooks(response.data);
+			} catch (error) {
+				alert('Failed to fetch books');
+			}
+		}
+
+		getBookData();
 	}, []);
 
 	// Filter books based on search query
@@ -29,12 +37,12 @@ const BookList = () => {
 	};
 
 	// Add Book handler function
-	const handleAddBook = () => {
+	const handleAddBookClick = () => {
 		navigate('/add-book');
 	};
 
 	//	Profile handler function
-	const handleProfile = () => {
+	const handleUserProfileClick = () => {
 		navigate('/profile');
 	};
 
@@ -42,10 +50,10 @@ const BookList = () => {
 	return (
 		<div className="booklist-container">
 			<div className="button-container">
-				<button className="addbook-button" onClick={handleAddBook}>Add Book</button>
+				<button className="addbook-button" onClick={handleAddBookClick}>Add Book</button>
 				<div>
-					<button className="profile-button" onClick={handleProfile}>Profile</button>
-					<button className="logout-button" onClick={logout}>Logout</button>
+					<button className="profile-button" onClick={handleUserProfileClick}>Profile</button>
+					<button className="logout-button" onClick={logoutHandler}>Logout</button>
 				</div>
 			</div>
 			<h1 className="booklist-title">Books</h1>

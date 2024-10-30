@@ -17,7 +17,7 @@ import TransactionList from './components/transactions/TransactionList';
 import Profile from './components/Profile';
 
 const App = () => {
-  const { token } = localStorage.getItem('token') ?? "";
+  const { authToken } = localStorage.getItem('token') ?? "";
 
   return (
     <AuthProvider>
@@ -29,7 +29,7 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
-            {token ? (
+            {authToken ? (
               <Route path="/search" element={<SearchComponent />} />
             ) : (
               <Route path="/search" element={<Login />} />

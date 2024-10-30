@@ -22,9 +22,9 @@ const BookDetail = () => {
 
     const currentUser = localStorage.getItem('userId') ?? ''
 
-    const [isOwner, setIsUser] = useState(false);
+    const [isOwner, setIsOwner] = useState(false);
 
-    const [isEditing, setIsEditing] = useState(false);
+    const [isEditingBook, setIsEditingBook] = useState(false);
     const [editedBook, setEditedBook] = useState({
         available: false,
         condition: ''
@@ -33,39 +33,39 @@ const BookDetail = () => {
 
     // Fetch book details
     useEffect(() => {
-        const fetchBook = async () => {
+        const fetchBookData = async () => {
             try {
                 const response = await BookService.getBookById(id);
                 setBook(response.data);
                 setEditedBook(response.data);
                 setCoverUrl(response.data.thumbnail);
-                setIsUser(response.data.user === currentUser);
+                setIsOwner(response.data.user === currentUser);
             } catch (error) {
                 alert('Failed to fetch book details');
             }
         };
 
-        fetchBook();
+        fetchBookData();
     }, [id, currentUser]);
 
     // Update book handler
-    const handleUpdate = () => {
+    const handleBookUpdate = () => {
         editedBook.available = book.available;
-        setIsEditing(true);
+        setIsEditingBook(true);
     };
 
     // Cancel edit handler
-    const handleCancel = () => {
+    const handleBookUpdateCancel = () => {
         setEditedBook(book);
-        setIsEditing(false);
+        setIsEditingBook(false);
     };
 
     // Save book handler
-    const handleSave = async () => {
+    const handleBookUpdateSave = async () => {
         try {
             await BookService.editBook(id, editedBook);
             setBook(editedBook);
-            setIsEditing(false);
+            setIsEditingBook(false);
             alert('Book updated successfully');
         } catch {
             alert('Failed to update book');
@@ -73,7 +73,7 @@ const BookDetail = () => {
     };
 
     // Delete book handler
-    const handleDelete = async () => {
+    const handleBookDelete = async () => {
         const confirmed = window.confirm('Are you sure you want to delete this book?');
         if (confirmed) {
             try {
@@ -87,13 +87,13 @@ const BookDetail = () => {
     };
 
     // Book data change handler
-    const handleChange = (e) => {
+    const handleBookDataChange = (e) => {
         const { name, value } = e.target;
         setEditedBook({ ...editedBook, [name]: name === 'available' ? value === 'true' : value });
     };
 
     // Borrow book handler
-    const handleBorrow = async () => {
+    const handleBookBorrow = async () => {
         const currentUserId = localStorage.getItem('userId');
         const borrow = window.confirm('Are you sure you want to borrow this book?');
         if (borrow) {
@@ -113,7 +113,7 @@ const BookDetail = () => {
     // Render the BookDetail component
     return (
         <div className="bookdetail-container">
-            {isEditing ? (
+            {isEditingBook ? (
                 <>
                     <form>
                         <p>Please select the book condition:</p>
@@ -125,7 +125,7 @@ const BookDetail = () => {
                                     name="condition"
                                     value={condition}
                                     checked={editedBook.condition === condition}
-                                    onChange={handleChange}
+                                    onChange={handleBookDataChange}
                                 />
                                 <label htmlFor={condition}>{condition}</label>
                             </div>
@@ -139,7 +139,7 @@ const BookDetail = () => {
                                 name="available"
                                 value={true}
                                 checked={editedBook.available === true}
-                                onChange={handleChange}
+                                onChange={handleBookDataChange}
                             />
                             <label htmlFor="available-yes">Yes</label>
                         </div>
@@ -150,12 +150,12 @@ const BookDetail = () => {
                                 name="available"
                                 value={false}
                                 checked={editedBook.available === false}
-                                onChange={handleChange}
+                                onChange={handleBookDataChange}
                             />
                             <label htmlFor="available-no">No</label>
                         </div>
-                        <button className="bookdetail-button" onClick={handleSave}>Save</button>
-                        <button className="bookcancel-button" onClick={handleCancel}>Cancel</button>
+                        <button className="bookdetail-button" onClick={handleBookUpdateSave}>Save</button>
+                        <button className="bookcancel-button" onClick={handleBookUpdateCancel}>Cancel</button>
                     </form>
                 </>
             ) : (
@@ -169,12 +169,12 @@ const BookDetail = () => {
 
                         {isOwner ? (
                             <div>
-                                <button className="bookupdate-button" onClick={handleUpdate}>Update Book</button>
-                                <button className="bookdelete-button" onClick={handleDelete}>Delete Book</button>
+                                <button className="bookupdate-button" onClick={handleBookUpdate}>Update Book</button>
+                                <button className="bookdelete-button" onClick={handleBookDelete}>Delete Book</button>
                             </div>
                         ) : (
                             <div>
-                                <button className="bookborrow-button" onClick={handleBorrow} disabled={!book.available}>Borrow Book</button>
+                                <button className="bookborrow-button" onClick={handleBookBorrow} disabled={!book.available}>Borrow Book</button>
                             </div>
                         )}
                     </div>

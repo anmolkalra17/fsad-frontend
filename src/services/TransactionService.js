@@ -1,12 +1,12 @@
 import axios from 'axios';
 
 //  Base URL
-const API_URL = 'http://localhost:8801/api/transactions/';
+const BASE_URL = 'http://localhost:8801/api/transactions/';
 
 //  Create transaction route
 const createTransaction = (userId, bookId, recipientUserId) => {
   const token = localStorage.getItem('token');
-  return axios.post(API_URL + 'create', { userId: userId, bookId: bookId, recipientUserId: recipientUserId }, {
+  return axios.post(BASE_URL + 'create', { userId: userId, bookId: bookId, recipientUserId: recipientUserId }, {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -16,7 +16,7 @@ const createTransaction = (userId, bookId, recipientUserId) => {
 //  Get transactions route
 const getTransactions = () => {
   const token = localStorage.getItem('token');
-  return axios.get(API_URL + 'history', {
+  return axios.get(BASE_URL + 'history', {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -26,7 +26,7 @@ const getTransactions = () => {
 //  Cancel transaction route
 const cancelTransaction = (id) => {
   const token = localStorage.getItem('token');
-  return axios.delete(API_URL + 'cancel/' + id, {
+  return axios.delete(BASE_URL + 'cancel/' + id, {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -36,7 +36,7 @@ const cancelTransaction = (id) => {
 //  Update transaction route
 const updateTransaction = (id, status) => {
   const token = localStorage.getItem('token');
-  return axios.put(API_URL + 'update/' + id, { status: status }, {
+  return axios.put(BASE_URL + 'update/' + id, { status: status }, {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -46,7 +46,7 @@ const updateTransaction = (id, status) => {
 //  Get borrow requests route
 const getBorrowRequests = () => {
   const token = localStorage.getItem('token');
-  return axios.get(API_URL + 'received/', {
+  return axios.get(BASE_URL + 'received/', {
     headers: {
       Authorization: `Bearer ${token}`
     }

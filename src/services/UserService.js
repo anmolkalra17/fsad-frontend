@@ -1,32 +1,32 @@
 import axios from 'axios';
 
 //  Base URL
-const API_URL = 'http://localhost:8801/api/auth/';
+const BASE_URL = 'http://localhost:8801/api/auth/';
 
 //  Register route
-const register = (email, password) => {
-  return axios.post(API_URL + 'register', { email, password });
+const register = (username, email, password) => {
+  return axios.post(BASE_URL + 'register', { username, email, password });
 };
 
 //  Login route
 const login = (email, password) => {
-  return axios.post(API_URL + 'login', { email, password });
+  return axios.post(BASE_URL + 'login', { email, password });
 };
 
 //  Logout route
 const logout = () => {
-  return axios.post(API_URL + 'logout');
+  return axios.post(BASE_URL + 'logout');
 };
 
 //  Reset password route
-const resetPassword = async (token, newPassword) => {
-  const response = axios.post(API_URL + `reset-password?token=${token}`, { newPassword: newPassword });
+const resetPassword = async (authToken, newPassword) => {
+  const response = axios.post(BASE_URL + `reset-password?token=${authToken}`, { newPassword: newPassword });
   return response.data;
 };
 
 //  Password reset email trigger
 const sendPasswordResetEmail = async (email) => {
-  return axios.post(API_URL + 'send-verification-email', { email });
+  return axios.post(BASE_URL + 'send-verification-email', { email });
 };
 
 //  User profile route

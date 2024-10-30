@@ -3,7 +3,7 @@ import UserService from '../../services/UserService';
 
 // Logout component
 const Logout = () => {
-	const handleLogout = async () => {
+	const handleLogoutClick = async () => {
 		try {
 			await UserService.logout();
 			alert('Logout successful');
@@ -13,7 +13,7 @@ const Logout = () => {
 	};
 
 	return (
-		<button onClick={handleLogout}>Logout</button>
+		<button onClick={handleLogoutClick}>Logout</button>
 	);
 };
 

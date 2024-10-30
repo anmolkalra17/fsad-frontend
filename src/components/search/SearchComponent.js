@@ -5,7 +5,7 @@ const SearchComponent = () => {
 	const [query, setQuery] = useState('');
 
 	// Handle search
-	const handleSearch = (e) => {
+	const handleQuerySearch = (e) => {
 		e.preventDefault();
 	};
 
@@ -13,12 +13,12 @@ const SearchComponent = () => {
 	return (
 		<div>
 			<h2>Search</h2>
-			<form onSubmit={handleSearch}>
+			<form onSubmit={handleQuerySearch}>
 				<input
 					type="text"
 					value={query}
 					onChange={(e) => setQuery(e.target.value)}
-					placeholder="Search..."
+					placeholder="Search Books..."
 				/>
 				<button type="submit">Search</button>
 			</form>

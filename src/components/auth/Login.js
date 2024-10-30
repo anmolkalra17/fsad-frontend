@@ -1,43 +1,51 @@
 import React, { useState, useContext } from 'react';
-import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
 import './Login.css';
+import UserService from '../../services/UserService';
 
+//  Login component
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
+  const [userEmail, setUserEmail] = useState('');
+  const [userPassword, setUserPassword] = useState('');
 
-  const handleSubmit = async (e) => {
+  const navigate = useNavigate();
+  const { loginHandler } = useContext(AuthContext);
+
+  // Handle form submission
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8801/api/auth/login', { email, password });
-      login(response.data.token, response.data.id);
+      const response = await UserService.login(userEmail, userPassword);
+      loginHandler(response.data.token, response.data.id);
       navigate('/');
     } catch (error) {
-      alert('Login failed: ', error);
+      if (error.response && error.response.data && error.response.data.message) {
+        alert('Login failed: ' + error.response.data.message);
+      } else {
+        alert('Login failed: An unknown error occurred');
+      }
     }
   };
 
+  // Render the Login component
   return (
     <div className="login-container">
       <h1 className="login-title">Login</h1>
-      <form className="login-form" onSubmit={handleSubmit}>
+      <form className="login-form" onSubmit={handleFormSubmit}>
         <input
           type="email"
           className="login-input"
           placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={userEmail}
+          onChange={(e) => setUserEmail(e.target.value)}
         />
         <input
           type="password"
           className="login-input"
           placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={userPassword}
+          onChange={(e) => setUserPassword(e.target.value)}
         />
         <button type="submit" className="login-button">Login</button>
       </form>
