@@ -57,17 +57,32 @@
 }
 
 .toggle-button {
-    margin-top: 10px;
     padding: 10px 20px;
+    margin-top: 10px;
     font-size: 1em;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .logout-profile-button {
-	margin-top: 20px;
-	padding: 10px 20px;
-	font-size: 1em;
-	cursor: pointer;
+    padding: 10px 20px;
+    margin-left: 20px;
+    margin-top: 10px;
+    font-size: 1em;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.logout-profile-button:hover, .toggle-button:hover {
+    background-color: #0056b3;
 }
 
 .grid-item {
